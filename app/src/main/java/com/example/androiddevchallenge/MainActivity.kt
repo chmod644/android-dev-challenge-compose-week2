@@ -30,10 +30,8 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -70,10 +68,10 @@ fun AppScaffold() {
 }
 
 @Composable
-fun MainScreen() {
-    var isRunning by rememberSaveable { mutableStateOf(false) }
-    var timerSeconds by rememberSaveable { mutableStateOf<Long>(60) }
-    var secondsUntilFinish by rememberSaveable { mutableStateOf<Long>(timerSeconds) }
+fun MainScreen(mainViewModel: MainViewModel = MainViewModel()) {
+    val isRunning = mainViewModel.isRunning
+    val timerSeconds = mainViewModel.timerSeconds
+    val secondsUntilFinish by mainViewModel.secondsUntilFinished.collectAsState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -83,13 +81,17 @@ fun MainScreen() {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxHeight(.5f)
         ) {
-            Timer(totalSeconds = secondsUntilFinish)
+            val seconds = if (isRunning) secondsUntilFinish else timerSeconds
+            Timer(totalSeconds = seconds)
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxHeight()
         ) {
-            Action(isRunning = isRunning)
+            Action(
+                isRunning = isRunning,
+                { isRunning -> mainViewModel.toggleRunning(isRunning) },
+                { seconds -> mainViewModel.addSeconds(seconds) })
         }
     }
 }

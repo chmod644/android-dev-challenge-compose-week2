@@ -23,40 +23,44 @@ import androidx.compose.ui.unit.dp
 import com.example.androiddevchallenge.ui.theme.MyTheme
 
 @Composable
-fun Action(isRunning: Boolean) {
+fun Action(isRunning: Boolean, onChangeRunning: (Boolean) -> Unit, onAddSeconds: (Long) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Button(onClick = { /*TODO*/ }) {
-                Text("+1min")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = { /*TODO*/ }) {
-                Text("+10sec")
+        if (!isRunning) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Button(onClick = { onAddSeconds(60) }) {
+                    Text("+1min")
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(onClick = { onAddSeconds(10) }) {
+                    Text("+10sec")
+                }
             }
         }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             var icon = if (isRunning) Icons.Default.Pause else Icons.Default.PlayArrow
-            FloatingActionButton(onClick = { /*TODO*/ }) {
+            FloatingActionButton(onClick = { onChangeRunning(!isRunning) }) {
                 Icon(icon, "Resume")
             }
         }
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Button(onClick = { /*TODO*/ }) {
-                Text("-1min")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = { /*TODO*/ }) {
-                Text("-10sec")
+        if (!isRunning) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Button(onClick = { onAddSeconds(-60) }) {
+                    Text("-1min")
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(onClick = { onAddSeconds(-10) }) {
+                    Text("-10sec")
+                }
             }
         }
     }
@@ -70,7 +74,7 @@ fun ActionUnderRunningPreview() {
             color = MaterialTheme.colors.surface,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Action(true)
+            Action(true, {}, {})
         }
     }
 }
@@ -80,7 +84,7 @@ fun ActionUnderRunningPreview() {
 fun ActionNotRunningPreview() {
     MyTheme {
         Surface(color = MaterialTheme.colors.surface) {
-            Action(false)
+            Action(false, {}, {})
         }
     }
 }
