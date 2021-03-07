@@ -91,7 +91,8 @@ fun MainScreen(mainViewModel: MainViewModel = MainViewModel()) {
             Action(
                 isRunning = isRunning,
                 { isRunning -> mainViewModel.toggleRunning(isRunning) },
-                { seconds -> mainViewModel.addSeconds(seconds) })
+                { seconds -> mainViewModel.addSeconds(seconds) }
+            )
         }
     }
 }
