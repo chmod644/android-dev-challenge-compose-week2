@@ -21,10 +21,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.Button
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -44,15 +45,23 @@ fun Action(isRunning: Boolean, onChangeRunning: (Boolean) -> Unit, onAddSeconds:
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier.fillMaxWidth()
     ) {
+        var buttonModifier = Modifier.width(96.dp)
         if (!isRunning) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Button(onClick = { onAddSeconds(60) }) {
+                OutlinedButton(
+                    onClick = { onAddSeconds(60) },
+                    modifier = buttonModifier
+                ) {
                     Text("+1min")
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { onAddSeconds(10) }) {
+                OutlinedButton(
+                    onClick = { onAddSeconds(10) },
+                    modifier = buttonModifier
+                ) {
+
                     Text("+10sec")
                 }
             }
@@ -69,11 +78,17 @@ fun Action(isRunning: Boolean, onChangeRunning: (Boolean) -> Unit, onAddSeconds:
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Button(onClick = { onAddSeconds(-60) }) {
+                OutlinedButton(
+                    onClick = { onAddSeconds(-60) },
+                    modifier = buttonModifier
+                ) {
                     Text("-1min")
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { onAddSeconds(-10) }) {
+                OutlinedButton(
+                    onClick = { onAddSeconds(-10) },
+                    modifier = buttonModifier
+                ) {
                     Text("-10sec")
                 }
             }

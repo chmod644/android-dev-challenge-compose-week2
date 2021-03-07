@@ -38,7 +38,7 @@ fun Timer(totalSeconds: Long) {
     }
     Text(
         untilFinished,
-        style = MaterialTheme.typography.h4
+        style = MaterialTheme.typography.h3
     )
 }
 
