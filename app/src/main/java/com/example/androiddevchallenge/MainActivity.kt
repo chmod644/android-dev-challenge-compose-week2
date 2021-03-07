@@ -35,8 +35,6 @@ import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -83,7 +81,7 @@ fun AppScaffold() {
 fun MainScreen(mainViewModel: MainViewModel = MainViewModel()) {
     val isRunning = mainViewModel.isRunning
     val timerSeconds = mainViewModel.timerSeconds
-    val secondsUntilFinish by mainViewModel.secondsUntilFinished.collectAsState()
+    val secondsUntilFinish = mainViewModel.secondsUntilFinished
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
