@@ -18,11 +18,27 @@ package com.example.androiddevchallenge
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.DrawerValue
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.rememberDrawerState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.androiddevchallenge.ui.components.Action
+import com.example.androiddevchallenge.ui.components.Timer
 import com.example.androiddevchallenge.ui.theme.MyTheme
 
 class MainActivity : AppCompatActivity() {
@@ -30,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyTheme {
-                MyApp()
+                AppScaffold()
             }
         }
     }
@@ -38,9 +54,51 @@ class MainActivity : AppCompatActivity() {
 
 // Start building your app here!
 @Composable
-fun MyApp() {
-    Surface(color = MaterialTheme.colors.background) {
-        Text(text = "Ready... Set... GO!")
+fun AppScaffold() {
+    val scaffoldState =
+        rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Closed))
+    Scaffold(
+        scaffoldState = scaffoldState,
+        topBar = {
+            TopAppBar(
+                title = { Text("Countdown") },
+                backgroundColor = MaterialTheme.colors.primary
+            )
+        },
+        content = { MainScreen() }
+    )
+}
+
+@Composable
+fun MainScreen() {
+    var isRunning by rememberSaveable { mutableStateOf(false) }
+    var timerSeconds by rememberSaveable { mutableStateOf<Long>(60) }
+    var secondsUntilFinish by rememberSaveable { mutableStateOf<Long>(timerSeconds) }
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxHeight(.5f)
+        ) {
+            Timer(totalSeconds = secondsUntilFinish)
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxHeight()
+        ) {
+            Action(isRunning = isRunning)
+        }
+    }
+}
+
+@Preview("Light Theme", widthDp = 360, heightDp = 640)
+@Composable
+fun ScaffoldPreview() {
+    MyTheme {
+        AppScaffold()
     }
 }
 
@@ -48,7 +106,7 @@ fun MyApp() {
 @Composable
 fun LightPreview() {
     MyTheme {
-        MyApp()
+        MainScreen()
     }
 }
 
@@ -56,6 +114,6 @@ fun LightPreview() {
 @Composable
 fun DarkPreview() {
     MyTheme(darkTheme = true) {
-        MyApp()
+        MainScreen()
     }
 }
